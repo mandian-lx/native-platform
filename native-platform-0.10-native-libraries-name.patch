@@ -1,0 +1,43 @@
+--- src/main/java/net/rubygrapefruit/platform/internal/Platform.java	2014-04-02 10:28:19.000000000 +0200
++++ src/main/java/net/rubygrapefruit/platform/internal/Platform.java-gil	2014-10-17 21:39:32.472144445 +0200
+@@ -37,12 +37,15 @@
+                         platform = new Window64Bit();
+                     }
+                 } else if (osName.contains("linux")) {
+-                    if (arch.equals("amd64")) {
++                    if (arch.contains("64")) {
+                         platform = new Linux64Bit();
+                     }
+                     else if (arch.equals("i386") || arch.equals("x86")) {
+                         platform = new Linux32Bit();
+                     }
++                    else if (arch.startsWith("arm")) {
++                        platform = new LinuxArm();
++                    }
+                 } else if (osName.contains("os x") || osName.contains("darwin")) {
+                     if (arch.equals("i386")) {
+                         platform = new OsX32Bit();
+@@ -190,14 +193,21 @@
+     private static class Linux32Bit extends Unix {
+         @Override
+         public String getId() {
+-            return "linux-i386";
++            return "linux";
+         }
+     }
+ 
+     private static class Linux64Bit extends Unix {
+         @Override
+         public String getId() {
+-            return "linux-amd64";
++            return "linux";
++        }
++    }
++
++    private static class LinuxArm extends Unix {
++        @Override
++        public String getId() {
++            return "linux";
+         }
+     }
+ 

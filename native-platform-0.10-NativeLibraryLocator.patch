@@ -1,0 +1,20 @@
+--- src/main/java/net/rubygrapefruit/platform/internal/NativeLibraryLocator.java	2014-04-02 10:28:19.000000000 +0200
++++ src/main/java/net/rubygrapefruit/platform/internal/NativeLibraryLocator.java-gil	2014-10-17 21:13:14.698629172 +0200
+@@ -32,6 +32,17 @@
+ 
+     public File find(LibraryDef libraryDef) throws IOException {
+         String resourceName = String.format("net/rubygrapefruit/platform/%s/%s", libraryDef.platform, libraryDef.name);
++        String bits = "";
++
++        if (System.getProperty("os.arch").contains("64")) {
++            bits = "64";
++        }
++
++        File usrLibFile = new File("/usr/lib" + bits + "/native-platform/" + libraryDef.name);
++        if (usrLibFile.isFile()) {
++            return usrLibFile;
++        }
++
+         if (extractDir != null) {
+             File libFile = new File(extractDir, String.format("%s/%s/%s", NativeLibraryFunctions.VERSION, libraryDef.platform, libraryDef.name));
+             File lockFile = new File(libFile.getParentFile(), libFile.getName() + ".lock");
